@@ -21,37 +21,38 @@ function Read-Utf8File {
 }
 
 $sourceRefRoot = Join-Path $SourceWorkspace 'reference'
-if (-not (Test-Path -LiteralPath $sourceRefRoot)) {
-  throw "Source reference root not found: $sourceRefRoot"
-}
+if (-not (Test-Path -LiteralPath $sourceRefRoot)) { throw "Source reference root not found: $sourceRefRoot" }
 
 $dateDirs = Get-ChildItem -LiteralPath $sourceRefRoot -Directory |
   Where-Object { $_.Name -match '^\d{4}-\d{2}-\d{2}$' } |
   Sort-Object Name
 
-if (-not $dateDirs) {
-  throw "No dated report folders found under $sourceRefRoot"
-}
+if (-not $dateDirs) { throw "No dated report folders found under $sourceRefRoot" }
 
 $latestDate = $dateDirs[-1].Name
-$latestSourceDir = Join-Path $sourceRefRoot $latestDate
-$sourceMd = Join-Path $latestSourceDir 'report.md'
-$sourceHtml = Join-Path $latestSourceDir 'report.html'
-if (-not (Test-Path -LiteralPath $sourceMd)) { throw "Missing report.md: $sourceMd" }
-if (-not (Test-Path -LiteralPath $sourceHtml)) { throw "Missing report.html: $sourceHtml" }
-
 $dailyRoot = Join-Path $RepoRoot 'arxiv-daily'
 $latestRoot = Join-Path $dailyRoot 'latest'
 $archiveRoot = Join-Path $dailyRoot 'archive'
-$latestArchiveDir = Join-Path $archiveRoot $latestDate
-foreach ($dir in @($dailyRoot, $latestRoot, $archiveRoot, $latestArchiveDir)) {
+foreach ($dir in @($dailyRoot, $latestRoot, $archiveRoot)) {
   New-Item -ItemType Directory -Force -Path $dir | Out-Null
 }
 
-Copy-Item -LiteralPath $sourceMd -Destination (Join-Path $latestRoot 'report.md') -Force
-Copy-Item -LiteralPath $sourceHtml -Destination (Join-Path $latestRoot 'report.html') -Force
-Copy-Item -LiteralPath $sourceMd -Destination (Join-Path $latestArchiveDir 'report.md') -Force
-Copy-Item -LiteralPath $sourceHtml -Destination (Join-Path $latestArchiveDir 'report.html') -Force
+foreach ($dateDir in $dateDirs) {
+  $date = $dateDir.Name
+  $sourceDir = Join-Path $sourceRefRoot $date
+  $sourceMd = Join-Path $sourceDir 'report.md'
+  $sourceHtml = Join-Path $sourceDir 'report.html'
+  if (-not (Test-Path -LiteralPath $sourceMd)) { throw "Missing report.md: $sourceMd" }
+  if (-not (Test-Path -LiteralPath $sourceHtml)) { throw "Missing report.html: $sourceHtml" }
+  $archiveDir = Join-Path $archiveRoot $date
+  New-Item -ItemType Directory -Force -Path $archiveDir | Out-Null
+  Copy-Item -LiteralPath $sourceMd -Destination (Join-Path $archiveDir 'report.md') -Force
+  Copy-Item -LiteralPath $sourceHtml -Destination (Join-Path $archiveDir 'report.html') -Force
+  if ($date -eq $latestDate) {
+    Copy-Item -LiteralPath $sourceMd -Destination (Join-Path $latestRoot 'report.md') -Force
+    Copy-Item -LiteralPath $sourceHtml -Destination (Join-Path $latestRoot 'report.html') -Force
+  }
+}
 
 $latestIndex = @(
   '<!doctype html>',
@@ -94,6 +95,7 @@ $latestFolderIndex = @(
 )
 Write-Utf8File -Path (Join-Path $latestRoot 'index.html') -Lines $latestFolderIndex
 
+$archiveDates = @($dateDirs | ForEach-Object { $_.Name })
 $archiveIndex = @(
   '<!doctype html>',
   '<html lang="zh-CN">',
@@ -114,7 +116,9 @@ $archiveIndex = @(
   '  <div class="card">',
   '    <ul>'
 )
-$archiveIndex += ($dateDirs | Sort-Object Name -Descending | ForEach-Object { '      <li><a href="/arxiv-daily/archive/' + $_.Name + '/report.html">' + $_.Name + '</a></li>' })
+foreach ($date in ($archiveDates | Sort-Object -Descending)) {
+  $archiveIndex += '      <li><a href="/arxiv-daily/archive/' + $date + '/report.html">' + $date + '</a></li>'
+}
 $archiveIndex += @(
   '    </ul>',
   '  </div>',
@@ -131,6 +135,7 @@ $readme = @(
   '- Archive index: [archive/index.html](/arxiv-daily/archive/)',
   '- Source workspace: `E:\zzx\眼底图像分割`',
   '- Sync source folders: `E:\zzx\眼底图像分割\reference\YYYY-MM-DD\`',
+  '- One-time task registration: `powershell -ExecutionPolicy Bypass -File scripts\\register-arxiv-daily-task.ps1`',
   '',
   'This folder is populated by the local sync script and mirrored to GitHub Pages.'
 )
@@ -172,5 +177,4 @@ if ($Commit) {
 
 Write-Host "Synced latest report $latestDate"
 Write-Host "Daily pages written under $dailyRoot"
-
 
