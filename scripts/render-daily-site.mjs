@@ -166,7 +166,16 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
     .daily-home .daily-report-title { margin: 1.25rem 0 0.35rem; font-weight: 700; }
     .daily-home .daily-page-lead,
     .daily-home .daily-report-meta { margin: 0 0 0.5rem; color: #6c757d; }
-    .daily-home .daily-index { margin: 0 0 1rem; color: #6c757d; }
+    .daily-home .daily-tree { margin: 0 0 1rem; color: #6c757d; }
+    .daily-home .daily-tree-title { font-weight: 600; margin-bottom: 0.4rem; }
+    .daily-home .daily-tree ul { list-style: none; padding-left: 1.05rem; margin: 0.35rem 0; }
+    .daily-home .daily-tree li { margin: 0.2rem 0; }
+    .daily-home .daily-tree details > summary { cursor: pointer; list-style: none; }
+    .daily-home .daily-tree details > summary::-webkit-details-marker { display: none; }
+    .daily-home .daily-tree-year > summary,
+    .daily-home .daily-tree-month > summary { font-weight: 600; color: #495057; }
+    .daily-home .daily-tree-day a { color: #0d6efd; text-decoration: none; }
+    .daily-home .daily-tree-day a:hover { text-decoration: underline; }
     .daily-home .daily-divider { margin: 1rem 0 1.5rem; border-top: 1px solid rgba(0,0,0,.12); }
     .daily-home .daily-report { padding: 0 0 1.75rem; margin: 0 0 1.75rem; border-bottom: 1px solid rgba(0,0,0,.08); }
     .daily-home .daily-report:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
@@ -252,15 +261,46 @@ function renderReportBlock({ date, title, reportDate, bodyHtml }) {
 
 function renderHomePage({ reports }) {
   const latest = reports[0];
-  const indexCards = reports
-    .map((report) => `<a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a>`)
-    .join(' · ');
+  const grouped = new Map();
+  for (const report of reports) {
+    const [year, month, day] = report.date.split('-');
+    if (!grouped.has(year)) grouped.set(year, new Map());
+    const months = grouped.get(year);
+    if (!months.has(month)) months.set(month, []);
+    months.get(month).push({ ...report, day });
+  }
+  const treeHtml = [...grouped.entries()]
+    .map(([year, months]) => {
+      const monthHtml = [...months.entries()]
+        .map(([month, days]) => {
+          const dayHtml = days
+            .map((report) => `<li class="daily-tree-day"><a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a></li>`)
+            .join('');
+          return `<li>
+            <details class="daily-tree-month" open>
+              <summary>${escapeHtml(month)} 月</summary>
+              <ul>${dayHtml}</ul>
+            </details>
+          </li>`;
+        })
+        .join('');
+      return `<li>
+        <details class="daily-tree-year" open>
+          <summary>${escapeHtml(year)}</summary>
+          <ul>${monthHtml}</ul>
+        </details>
+      </li>`;
+    })
+    .join('');
   const blocks = reports.map((report) => renderReportBlock(report)).join('');
   const bodyHtml = `
   <h2 class="daily-page-title">最新日报</h2>
   <p class="daily-page-lead">当前首页直接承载全部日报内容，最新一期是 <a href="#${escapeHtml(latest.date)}">${escapeHtml(latest.reportDate)}</a>。</p>
   <p class="daily-page-lead">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
-  <p class="daily-index" id="daily-reports">${indexCards}</p>
+  <div class="daily-tree" id="daily-reports">
+    <div class="daily-tree-title">按年月日选择</div>
+    <ul>${treeHtml}</ul>
+  </div>
   <hr class="daily-divider" />
   ${blocks}`;
   return siteShell({

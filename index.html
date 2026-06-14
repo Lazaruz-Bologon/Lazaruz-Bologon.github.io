@@ -28,7 +28,16 @@
     .daily-home .daily-report-title { margin: 1.25rem 0 0.35rem; font-weight: 700; }
     .daily-home .daily-page-lead,
     .daily-home .daily-report-meta { margin: 0 0 0.5rem; color: #6c757d; }
-    .daily-home .daily-index { margin: 0 0 1rem; color: #6c757d; }
+    .daily-home .daily-tree { margin: 0 0 1rem; color: #6c757d; }
+    .daily-home .daily-tree-title { font-weight: 600; margin-bottom: 0.4rem; }
+    .daily-home .daily-tree ul { list-style: none; padding-left: 1.05rem; margin: 0.35rem 0; }
+    .daily-home .daily-tree li { margin: 0.2rem 0; }
+    .daily-home .daily-tree details > summary { cursor: pointer; list-style: none; }
+    .daily-home .daily-tree details > summary::-webkit-details-marker { display: none; }
+    .daily-home .daily-tree-year > summary,
+    .daily-home .daily-tree-month > summary { font-weight: 600; color: #495057; }
+    .daily-home .daily-tree-day a { color: #0d6efd; text-decoration: none; }
+    .daily-home .daily-tree-day a:hover { text-decoration: underline; }
     .daily-home .daily-divider { margin: 1rem 0 1.5rem; border-top: 1px solid rgba(0,0,0,.12); }
     .daily-home .daily-report { padding: 0 0 1.75rem; margin: 0 0 1.75rem; border-bottom: 1px solid rgba(0,0,0,.08); }
     .daily-home .daily-report:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
@@ -98,7 +107,20 @@
   <h2 class="daily-page-title">最新日报</h2>
   <p class="daily-page-lead">当前首页直接承载全部日报内容，最新一期是 <a href="#2026-06-14">2026-06-14</a>。</p>
   <p class="daily-page-lead">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
-  <p class="daily-index" id="daily-reports"><a href="#2026-06-14">2026-06-14</a> · <a href="#2026-06-13">2026-06-13</a></p>
+  <div class="daily-tree" id="daily-reports">
+    <div class="daily-tree-title">按年月日选择</div>
+    <ul><li>
+        <details class="daily-tree-year" open>
+          <summary>2026</summary>
+          <ul><li>
+            <details class="daily-tree-month" open>
+              <summary>06 月</summary>
+              <ul><li class="daily-tree-day"><a href="#2026-06-14">2026-06-14</a></li><li class="daily-tree-day"><a href="#2026-06-13">2026-06-13</a></li></ul>
+            </details>
+          </li></ul>
+        </details>
+      </li></ul>
+  </div>
   <hr class="daily-divider" />
   
   <section class="daily-report" id="2026-06-14">
