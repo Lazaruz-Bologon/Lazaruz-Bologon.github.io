@@ -13,7 +13,7 @@ if (-not (Test-Path -LiteralPath $renderScript)) {
 node $renderScript --source $SourceWorkspace --repo $RepoRoot
 
 if ($Commit) {
-  git -C $RepoRoot add index.html arxiv-daily scripts
+  git -C $RepoRoot add index.html scripts
   if (-not (git -C $RepoRoot diff --cached --quiet)) {
     git -C $RepoRoot config user.name 'github-actions[bot]'
     git -C $RepoRoot config user.email 'github-actions[bot]@users.noreply.github.com'

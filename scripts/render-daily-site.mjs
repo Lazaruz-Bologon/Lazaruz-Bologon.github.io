@@ -50,7 +50,7 @@ function renderMarkdown(lines) {
 
   const flushList = () => {
     if (listItems.length === 0) return;
-    const tag = listType === 'ul' ? 'ul' : 'ol';
+    const tag = listType === 'ol' ? 'ol' : 'ul';
     blocks.push(`<${tag}>`);
     for (const item of listItems) blocks.push(`<li>${renderInline(item)}</li>`);
     blocks.push(`</${tag}>`);
@@ -89,9 +89,7 @@ function renderMarkdown(lines) {
       continue;
     }
 
-    if (tableLines.length > 0 && !/^\|/.test(line)) {
-      flushTable();
-    }
+    if (tableLines.length > 0 && !/^\|/.test(line)) flushTable();
 
     const h = line.match(/^(#{1,6})\s+(.*)$/);
     if (h) {
@@ -146,7 +144,7 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="theme-color" content="#2f4154">
   <meta name="description" content="${escapeHtml(description)}">
-  <meta property="og:type" content="article">
+  <meta property="og:type" content="website">
   <meta property="og:title" content="${escapeHtml(title)}">
   <meta property="og:description" content="${escapeHtml(description)}">
   <meta property="og:locale" content="zh_CN">
@@ -190,6 +188,7 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
               <li class="nav-item"><a class="nav-link" href="/archives/" target="_self"><i class="iconfont icon-archive-fill"></i><span>归档</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/categories/" target="_self"><i class="iconfont icon-category-fill"></i><span>分类</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/tags/" target="_self"><i class="iconfont icon-tags-fill"></i><span>标签</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="#daily-reports" target="_self"><i class="iconfont icon-file-text"></i><span>日报</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/about/" target="_self"><i class="iconfont icon-user-fill"></i><span>关于</span></a></li>
               <li class="nav-item" id="search-btn"><a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search"><i class="iconfont icon-search"></i></a></li>
               <li class="nav-item" id="color-toggle-btn"><a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle"><i class="iconfont icon-dark" id="color-toggle-icon"></i></a></li>
@@ -225,88 +224,83 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
 </html>`;
 }
 
-function renderLandingPage({ latestDate, archiveDates }) {
-  const archiveLinks = archiveDates
-    .slice()
-    .sort((a, b) => b.localeCompare(a))
-    .map((date) => `<li><a href="/arxiv-daily/archive/${date}/">${date}</a></li>`)
+function renderReportBlock({ date, title, reportDate, bodyHtml }) {
+  return `
+  <section class="mb-5" id="${escapeHtml(date)}">
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="card-title mb-2">${escapeHtml(reportDate)}</h2>
+        <p class="card-text mb-0">论文标题：${escapeHtml(title)}</p>
+      </div>
+    </div>
+    <article class="post-content mx-auto">
+      <div class="markdown-body">${bodyHtml}</div>
+    </article>
+  </section>`;
+}
+
+function renderHomePage({ reports }) {
+  const latest = reports[0];
+  const indexCards = reports
+    .map((report) => `<li><a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a> - ${escapeHtml(report.title)}</li>`)
     .join('');
+  const blocks = reports.map((report) => renderReportBlock(report)).join('');
   const bodyHtml = `
   <div class="row">
-    <div class="col-12 col-lg-8 mx-auto">
+    <div class="col-12 col-lg-10 mx-auto">
       <div class="card shadow-sm mb-4">
         <div class="card-body">
           <h2 class="card-title">最新日报</h2>
-          <p class="card-text">当前最新日报是 <a href="/arxiv-daily/latest/">${latestDate}</a>，可直接进入完整文章页。</p>
-          <a class="btn btn-primary" href="/arxiv-daily/latest/">打开最新日报</a>
+          <p class="card-text">当前首页直接承载全部日报内容，最新一期是 <a href="#${escapeHtml(latest.date)}">${escapeHtml(latest.reportDate)}</a>。</p>
+          <p class="card-text mb-0">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
         </div>
       </div>
-      <div class="card shadow-sm">
+      <div class="card shadow-sm mb-4" id="daily-reports">
         <div class="card-body">
-          <h2 class="card-title">历史归档</h2>
-          <p class="card-text">以下日期都已按主页模板结构化保存：</p>
-          <ul>${archiveLinks}</ul>
+          <h2 class="card-title">日报索引</h2>
+          <ul>${indexCards}</ul>
         </div>
       </div>
+      ${blocks}
     </div>
   </div>`;
   return siteShell({
     title: 'arXiv 医学图像分割日报',
-    subtitle: '最新日报与历史归档',
+    subtitle: '日报直接展示在首页',
     bodyHtml,
-    description: 'arXiv 医学图像分割日报主页，提供最新日报与历史归档入口。',
+    description: 'arXiv 医学图像分割日报首页，直接展示每日内容与历史记录。',
   });
-}
-
-function renderArchiveIndexPage(entries) {
-  const items = entries
-    .slice()
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .map((entry) => `<li><a href="/arxiv-daily/archive/${entry.date}/">${entry.date}</a> - ${escapeHtml(entry.title)}</li>`)
-    .join('');
-  const bodyHtml = `
-  <div class="row">
-    <div class="col-12 col-lg-9 mx-auto">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <h2 class="card-title">日报归档</h2>
-          <p class="card-text">下面列出所有已同步的日报，点击日期直接打开对应文章页。</p>
-          <ul>${items}</ul>
-        </div>
-      </div>
-    </div>
-  </div>`;
-  return siteShell({
-    title: 'arXiv 医学图像分割日报归档',
-    subtitle: '按日期浏览历史日报',
-    bodyHtml,
-    description: 'arXiv 医学图像分割日报归档列表。',
-  });
-}
-
-function renderReportPage({ title, date, bodyHtml }) {
-  const reportHtml = `
-  <div class="row">
-    <div class="col-12 col-lg-10 mx-auto">
-      <article class="post-content mx-auto">
-        <div class="markdown-body">${bodyHtml}</div>
-      </article>
-    </div>
-  </div>`;
-  return siteShell({
-    title,
-    subtitle: date,
-    bodyHtml: reportHtml,
-    description: `${title}（${date}）`,
-  });
-}
-
-async function ensureDir(dir) {
-  await fs.mkdir(dir, { recursive: true });
 }
 
 async function writeText(filePath, content) {
   await fs.writeFile(filePath, content, 'utf8');
+}
+
+async function loadReports(sourceRoot) {
+  const sourceRefRoot = path.join(sourceRoot, 'reference');
+  const dates = (await fs.readdir(sourceRefRoot, { withFileTypes: true }))
+    .filter((entry) => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
+    .map((entry) => entry.name)
+    .sort((a, b) => b.localeCompare(a));
+  if (dates.length === 0) {
+    throw new Error(`No dated report folders found under ${sourceRefRoot}`);
+  }
+
+  const reports = [];
+  for (const date of dates) {
+    const sourceMd = path.join(sourceRefRoot, date, 'report.md');
+    const md = await fs.readFile(sourceMd, 'utf8');
+    const lines = md.split(/\r?\n/);
+    const titleMatch = md.match(/^#\s+(.+)$/m);
+    const title = titleMatch ? titleMatch[1].trim() : 'arXiv 医学图像分割日报';
+    const dateMatch = md.match(/^日期：(.+)$/m);
+    const reportDate = dateMatch ? dateMatch[1].trim() : date;
+    const startLine = lines.findIndex((line) => /^##\s+今日筛选结果/.test(line));
+    const bodyLines = startLine >= 0 ? lines.slice(startLine) : lines;
+    const bodyHtml = renderMarkdown(bodyLines);
+    reports.push({ date, title, reportDate, bodyHtml });
+  }
+  return reports;
 }
 
 async function main() {
@@ -317,73 +311,12 @@ async function main() {
     throw new Error('Usage: node scripts/render-daily-site.mjs --source <sourceRoot> --repo <repoRoot>');
   }
 
-  const sourceRefRoot = path.join(sourceRoot, 'reference');
-  const dates = (await fs.readdir(sourceRefRoot, { withFileTypes: true }))
-    .filter((entry) => entry.isDirectory() && /^\d{4}-\d{2}-\d{2}$/.test(entry.name))
-    .map((entry) => entry.name)
-    .sort();
-  if (dates.length === 0) {
-    throw new Error(`No dated report folders found under ${sourceRefRoot}`);
-  }
+  const reports = await loadReports(sourceRoot);
+  const homepage = renderHomePage({ reports });
+  await writeText(path.join(repoRoot, 'index.html'), homepage);
+  await fs.rm(path.join(repoRoot, 'arxiv-daily'), { recursive: true, force: true });
 
-  const dailyRoot = path.join(repoRoot, 'arxiv-daily');
-  const latestRoot = path.join(dailyRoot, 'latest');
-  const archiveRoot = path.join(dailyRoot, 'archive');
-  await ensureDir(dailyRoot);
-  await ensureDir(latestRoot);
-  await ensureDir(archiveRoot);
-
-  const entries = [];
-  let latestDate = dates[dates.length - 1];
-
-  for (const date of dates) {
-    const sourceDir = path.join(sourceRefRoot, date);
-    const sourceMd = path.join(sourceDir, 'report.md');
-    const md = await fs.readFile(sourceMd, 'utf8');
-    const titleMatch = md.match(/^#\s+(.+)$/m);
-    const title = titleMatch ? titleMatch[1].trim() : 'arXiv 医学图像分割日报';
-    const dateMatch = md.match(/^日期：(.+)$/m);
-    const reportDate = dateMatch ? dateMatch[1].trim() : date;
-
-    const bodyStart = md.split(/\r?\n/).findIndex((line) => /^##\s+今日筛选结果/.test(line));
-    const bodyLines = bodyStart >= 0 ? md.split(/\r?\n/).slice(bodyStart) : md.split(/\r?\n/);
-    const bodyHtml = renderMarkdown(bodyLines);
-    const pageHtml = renderReportPage({ title, date: reportDate, bodyHtml });
-
-    const archiveDir = path.join(archiveRoot, date);
-    await ensureDir(archiveDir);
-    await writeText(path.join(archiveDir, 'index.html'), pageHtml);
-    await writeText(path.join(archiveDir, 'report.html'), pageHtml);
-    await writeText(path.join(archiveDir, 'report.md'), md);
-
-    entries.push({ date, title, reportDate, pageHtml });
-    if (date === latestDate) {
-      await writeText(path.join(latestRoot, 'index.html'), pageHtml);
-      await writeText(path.join(latestRoot, 'report.html'), pageHtml);
-      await writeText(path.join(latestRoot, 'report.md'), md);
-    }
-  }
-
-  const landingPage = renderLandingPage({ latestDate, archiveDates: dates });
-  const archiveIndexPage = renderArchiveIndexPage(entries);
-  await writeText(path.join(dailyRoot, 'index.html'), landingPage);
-  await writeText(path.join(archiveRoot, 'index.html'), archiveIndexPage);
-  await writeText(
-    path.join(dailyRoot, 'README.md'),
-    [
-      '# arXiv Daily Report',
-      '',
-      '- Latest report: [latest/index.html](/arxiv-daily/latest/)',
-      '- Archive index: [archive/index.html](/arxiv-daily/archive/)',
-      '- Source workspace: `E:\\zzx\\眼底图像分割`',
-      '- Sync source folders: `E:\\zzx\\眼底图像分割\\reference\\YYYY-MM-DD\\`',
-      '',
-      'This folder is populated by the local sync script and mirrored to GitHub Pages.',
-      '',
-    ].join('\n'),
-  );
-
-  console.log(`Rendered ${dates.length} daily report page(s).`);
+  console.log(`Rendered homepage with ${reports.length} daily report(s).`);
 }
 
 main().catch((err) => {
