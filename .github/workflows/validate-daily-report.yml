@@ -1,0 +1,18 @@
+﻿name: Validate Daily Report Sync
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify daily pages exist
+        run: |
+          test -f arxiv-daily/index.html
+          test -f arxiv-daily/latest/report.html
+          test -f arxiv-daily/archive/index.html
