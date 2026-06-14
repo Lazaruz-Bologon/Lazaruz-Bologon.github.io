@@ -1,7 +1,7 @@
 param(
-  [string]$SourceWorkspace = 'E:\zzx\眼底图像分割',
+  [string]$SourceWorkspace = (Split-Path $RepoRoot -Parent),
   [string]$RepoRoot = (Split-Path $PSScriptRoot -Parent),
-  [int]$ReadyDelayMinutes = 30,
+  [int]$ReadyDelayMinutes = 5,
   [switch]$Commit
 )
 
