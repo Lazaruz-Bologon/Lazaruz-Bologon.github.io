@@ -135,7 +135,7 @@ function renderMarkdown(lines) {
   return blocks.join('\n');
 }
 
-function siteShell({ title, subtitle, bodyHtml, description }) {
+function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
   return `<!doctype html>
 <html lang="zh-CN" data-default-color-scheme="auto">
 <head>
@@ -160,6 +160,25 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
   <link rel="stylesheet" href="/css/main.css">
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css">
   <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css">
+  <style>
+    .daily-home .daily-page { padding: 0.25rem 0 1rem; }
+    .daily-home .daily-page-title,
+    .daily-home .daily-report-title { margin: 1.25rem 0 0.35rem; font-weight: 700; }
+    .daily-home .daily-page-lead,
+    .daily-home .daily-report-meta { margin: 0 0 0.5rem; color: #6c757d; }
+    .daily-home .daily-index { margin: 0 0 1rem; color: #6c757d; }
+    .daily-home .daily-divider { margin: 1rem 0 1.5rem; border-top: 1px solid rgba(0,0,0,.12); }
+    .daily-home .daily-report { padding: 0 0 1.75rem; margin: 0 0 1.75rem; border-bottom: 1px solid rgba(0,0,0,.08); }
+    .daily-home .daily-report:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+    .daily-home .daily-report-body { background: transparent; padding: 0; }
+    .daily-home .markdown-body { background: transparent; }
+    .daily-home .markdown-body h2,
+    .daily-home .markdown-body h3,
+    .daily-home .markdown-body h4 { margin-top: 1.1rem; }
+    .daily-home .markdown-body table { width: 100%; }
+    .daily-home .markdown-body p,
+    .daily-home .markdown-body li { line-height: 1.78; }
+  </style>
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
@@ -169,7 +188,7 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
   <script src="/js/color-schema.js"></script>
   <meta name="generator" content="Hexo 7.3.0">
 </head>
-<body>
+<body class="${escapeHtml(bodyClass)}">
   <header>
     <div class="header-inner" style="height: 70vh;">
       <nav id="navbar" class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
@@ -213,9 +232,7 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
     <div class="container nopadding-x-md">
       <div id="board" style="margin-top: 0">
         <div class="container">
-          <article class="post-content mx-auto">
-            <div class="markdown-body">${bodyHtml}</div>
-          </article>
+          <div class="daily-page">${bodyHtml}</div>
         </div>
       </div>
     </div>
@@ -226,49 +243,32 @@ function siteShell({ title, subtitle, bodyHtml, description }) {
 
 function renderReportBlock({ date, title, reportDate, bodyHtml }) {
   return `
-  <section class="mb-5" id="${escapeHtml(date)}">
-    <div class="card shadow-sm mb-3">
-      <div class="card-body">
-        <h2 class="card-title mb-2">${escapeHtml(reportDate)}</h2>
-        <p class="card-text mb-0">论文标题：${escapeHtml(title)}</p>
-      </div>
-    </div>
-    <article class="post-content mx-auto">
-      <div class="markdown-body">${bodyHtml}</div>
-    </article>
+  <section class="daily-report" id="${escapeHtml(date)}">
+    <h2 class="daily-report-title">${escapeHtml(reportDate)}</h2>
+    <p class="daily-report-meta">论文标题：${escapeHtml(title)}</p>
+    <div class="markdown-body daily-report-body">${bodyHtml}</div>
   </section>`;
 }
 
 function renderHomePage({ reports }) {
   const latest = reports[0];
   const indexCards = reports
-    .map((report) => `<li><a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a> - ${escapeHtml(report.title)}</li>`)
-    .join('');
+    .map((report) => `<a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a>`)
+    .join(' · ');
   const blocks = reports.map((report) => renderReportBlock(report)).join('');
   const bodyHtml = `
-  <div class="row">
-    <div class="col-12 col-lg-10 mx-auto">
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
-          <h2 class="card-title">最新日报</h2>
-          <p class="card-text">当前首页直接承载全部日报内容，最新一期是 <a href="#${escapeHtml(latest.date)}">${escapeHtml(latest.reportDate)}</a>。</p>
-          <p class="card-text mb-0">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
-        </div>
-      </div>
-      <div class="card shadow-sm mb-4" id="daily-reports">
-        <div class="card-body">
-          <h2 class="card-title">日报索引</h2>
-          <ul>${indexCards}</ul>
-        </div>
-      </div>
-      ${blocks}
-    </div>
-  </div>`;
+  <h2 class="daily-page-title">最新日报</h2>
+  <p class="daily-page-lead">当前首页直接承载全部日报内容，最新一期是 <a href="#${escapeHtml(latest.date)}">${escapeHtml(latest.reportDate)}</a>。</p>
+  <p class="daily-page-lead">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
+  <p class="daily-index" id="daily-reports">${indexCards}</p>
+  <hr class="daily-divider" />
+  ${blocks}`;
   return siteShell({
     title: 'arXiv 医学图像分割日报',
     subtitle: '日报直接展示在首页',
     bodyHtml,
     description: 'arXiv 医学图像分割日报首页，直接展示每日内容与历史记录。',
+    bodyClass: 'daily-home',
   });
 }
 
