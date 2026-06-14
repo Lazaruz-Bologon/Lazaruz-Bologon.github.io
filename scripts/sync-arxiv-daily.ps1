@@ -13,7 +13,7 @@ if (-not (Test-Path -LiteralPath $renderScript)) {
 node $renderScript --source $SourceWorkspace --repo $RepoRoot
 
 if ($Commit) {
-  git -C $RepoRoot add index.html scripts
+  git -C $RepoRoot add index.html 2026 README.md scripts .github\workflows\validate-daily-report.yml
   if (-not (git -C $RepoRoot diff --cached --quiet)) {
     git -C $RepoRoot config user.name 'github-actions[bot]'
     git -C $RepoRoot config user.email 'github-actions[bot]@users.noreply.github.com'

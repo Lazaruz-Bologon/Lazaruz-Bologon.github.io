@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify homepage report exists
+      - name: Verify structured daily pages exist
         run: |
           test -f index.html
+          test -f 2026/index.html
+          test -f 2026/06/index.html
+          test -f 2026/06/14/index.html

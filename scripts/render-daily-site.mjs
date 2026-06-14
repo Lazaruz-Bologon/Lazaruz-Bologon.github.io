@@ -96,8 +96,7 @@ function renderMarkdown(lines) {
       flushPara();
       flushList();
       flushTable();
-      const level = h[1].length;
-      blocks.push(`<h${level}>${renderInline(h[2].trim())}</h${level}>`);
+      blocks.push(`<h${h[1].length}>${renderInline(h[2].trim())}</h${h[1].length}>`);
       continue;
     }
 
@@ -161,35 +160,28 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
   <link id="highlight-css" rel="stylesheet" href="/css/highlight.css">
   <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css">
   <style>
-    .daily-home .daily-page { padding: 0.25rem 0 1rem; }
-    .daily-home .daily-page-title,
-    .daily-home .daily-report-title { margin: 1.25rem 0 0.35rem; font-weight: 700; }
-    .daily-home .daily-page-lead,
-    .daily-home .daily-report-meta { margin: 0 0 0.5rem; color: #6c757d; }
-    .daily-home .daily-tree { margin: 0 0 1rem; color: #6c757d; }
-    .daily-home .daily-tree-title { font-weight: 600; margin-bottom: 0.4rem; }
-    .daily-home .daily-tree ul { list-style: none; padding-left: 1.05rem; margin: 0.35rem 0; }
-    .daily-home .daily-tree li { margin: 0.2rem 0; }
-    .daily-home .daily-tree details > summary { cursor: pointer; list-style: none; }
-    .daily-home .daily-tree details > summary::-webkit-details-marker { display: none; }
-    .daily-home .daily-tree-year > summary,
-    .daily-home .daily-tree-month > summary { font-weight: 600; color: #495057; }
-    .daily-home .daily-tree-day a { color: #0d6efd; text-decoration: none; }
-    .daily-home .daily-tree-day a:hover { text-decoration: underline; }
-    .daily-home .daily-divider { margin: 1rem 0 1.5rem; border-top: 1px solid rgba(0,0,0,.12); }
-    .daily-home .daily-report { padding: 0 0 1.75rem; margin: 0 0 1.75rem; border-bottom: 1px solid rgba(0,0,0,.08); }
-    .daily-home .daily-report:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
-    .daily-home .daily-report-nav { margin: 0 0 0.35rem; font-size: 0.95rem; }
-    .daily-home .daily-report-nav a { color: #6c757d; text-decoration: none; }
-    .daily-home .daily-report-nav a:hover { text-decoration: underline; }
-    .daily-home .daily-report-body { background: transparent; padding: 0; }
-    .daily-home .markdown-body { background: transparent; }
-    .daily-home .markdown-body h2,
-    .daily-home .markdown-body h3,
-    .daily-home .markdown-body h4 { margin-top: 1.1rem; }
-    .daily-home .markdown-body table { width: 100%; }
-    .daily-home .markdown-body p,
-    .daily-home .markdown-body li { line-height: 1.78; }
+    .daily-shell { padding: 0.35rem 0 1rem; }
+    .daily-shell .daily-title { margin: 1rem 0 0.35rem; font-weight: 700; }
+    .daily-shell .daily-subtitle { margin: 0 0 1rem; color: #6c757d; }
+    .daily-shell .daily-tree { margin: 0 0 1rem; }
+    .daily-shell .daily-tree ul { list-style: none; padding-left: 1.05rem; margin: 0.35rem 0; }
+    .daily-shell .daily-tree li { margin: 0.2rem 0; }
+    .daily-shell .daily-tree details > summary { cursor: pointer; list-style: none; font-weight: 600; color: #495057; }
+    .daily-shell .daily-tree details > summary::-webkit-details-marker { display: none; }
+    .daily-shell .daily-day-link { color: #0d6efd; text-decoration: none; }
+    .daily-shell .daily-day-link:hover { text-decoration: underline; }
+    .daily-shell .daily-page { border-top: 1px solid rgba(0,0,0,.1); padding-top: 1rem; margin-top: 1rem; }
+    .daily-shell .daily-page:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+    .daily-shell .daily-page-nav { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .daily-shell .daily-page-nav a { color: #6c757d; text-decoration: none; }
+    .daily-shell .daily-page-nav a:hover { text-decoration: underline; }
+    .daily-shell .daily-page-meta { margin: 0 0 0.45rem; color: #6c757d; }
+    .daily-shell .daily-page-links { margin: 0 0 1rem; color: #6c757d; }
+    .daily-shell .daily-page-links a { color: #0d6efd; text-decoration: none; }
+    .daily-shell .daily-page-links a:hover { text-decoration: underline; }
+    .daily-shell .markdown-body { background: transparent; }
+    .daily-shell .markdown-body p,
+    .daily-shell .markdown-body li { line-height: 1.78; }
   </style>
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
@@ -219,7 +211,7 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
               <li class="nav-item"><a class="nav-link" href="/archives/" target="_self"><i class="iconfont icon-archive-fill"></i><span>归档</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/categories/" target="_self"><i class="iconfont icon-category-fill"></i><span>分类</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/tags/" target="_self"><i class="iconfont icon-tags-fill"></i><span>标签</span></a></li>
-              <li class="nav-item"><a class="nav-link" href="#daily-reports" target="_self"><i class="iconfont icon-file-text"></i><span>日报</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="#daily-tree" target="_self"><i class="iconfont icon-file-text"></i><span>日报</span></a></li>
               <li class="nav-item"><a class="nav-link" href="/about/" target="_self"><i class="iconfont icon-user-fill"></i><span>关于</span></a></li>
               <li class="nav-item" id="search-btn"><a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search"><i class="iconfont icon-search"></i></a></li>
               <li class="nav-item" id="color-toggle-btn"><a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle"><i class="iconfont icon-dark" id="color-toggle-icon"></i></a></li>
@@ -244,7 +236,7 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
     <div class="container nopadding-x-md">
       <div id="board" style="margin-top: 0">
         <div class="container">
-          <div class="daily-page">${bodyHtml}</div>
+          <div class="daily-shell">${bodyHtml}</div>
         </div>
       </div>
     </div>
@@ -253,71 +245,118 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
 </html>`;
 }
 
-function renderReportBlock({ date, title, reportDate, bodyHtml }) {
-  return `
-  <section class="daily-report" id="${escapeHtml(date)}">
-    <div class="daily-report-nav"><a href="#daily-reports">回到目录</a></div>
-    <h2 class="daily-report-title">${escapeHtml(reportDate)}</h2>
-    <p class="daily-report-meta">论文标题：${escapeHtml(title)}</p>
-    <div class="markdown-body daily-report-body">${bodyHtml}</div>
-  </section>`;
+function splitDate(date) {
+  const [year, month, day] = date.split('-');
+  return { year, month, day };
 }
 
-function renderHomePage({ reports }) {
-  const latest = reports[0];
-  const grouped = new Map();
-  for (const report of reports) {
-    const [year, month, day] = report.date.split('-');
-    if (!grouped.has(year)) grouped.set(year, new Map());
-    const months = grouped.get(year);
-    if (!months.has(month)) months.set(month, []);
-    months.get(month).push({ ...report, day });
-  }
-  const treeHtml = [...grouped.entries()]
-    .map(([year, months]) => {
-      const monthHtml = [...months.entries()]
-        .map(([month, days]) => {
-          const dayHtml = days
-            .map((report) => `<li class="daily-tree-day"><a href="#${escapeHtml(report.date)}">${escapeHtml(report.date)}</a></li>`)
-            .join('');
-          return `<li>
-            <details class="daily-tree-month" open>
-              <summary>${escapeHtml(month)} 月</summary>
-              <ul>${dayHtml}</ul>
-            </details>
-          </li>`;
-        })
-        .join('');
-      return `<li>
-        <details class="daily-tree-year" open>
-          <summary>${escapeHtml(year)}</summary>
-          <ul>${monthHtml}</ul>
-        </details>
-      </li>`;
-    })
-    .join('');
-  const blocks = reports.map((report) => renderReportBlock(report)).join('');
-  const bodyHtml = `
-  <h2 class="daily-page-title">最新日报</h2>
-  <p class="daily-page-lead">当前首页直接承载全部日报内容，最新一期是 <a href="#${escapeHtml(latest.date)}">${escapeHtml(latest.reportDate)}</a>。</p>
-  <p class="daily-page-lead">下面按日期倒序展示，可在同一页面直接阅读全文。</p>
-  <div class="daily-tree" id="daily-reports">
-    <div class="daily-tree-title">按年月日选择</div>
-    <ul>${treeHtml}</ul>
-  </div>
-  <hr class="daily-divider" />
-  ${blocks}`;
+function reportRelPath(date) {
+  const { year, month, day } = splitDate(date);
+  return `/${year}/${month}/${day}/`;
+}
+
+function monthIndexPath(year, month) {
+  return `/${year}/${month}/`;
+}
+
+function yearIndexPath(year) {
+  return `/${year}/`;
+}
+
+function renderReportPage(report, nav) {
+  const { date, title, reportDate, bodyHtml } = report;
+  const { year, month } = splitDate(date);
   return siteShell({
-    title: 'arXiv 医学图像分割日报',
-    subtitle: '日报直接展示在首页',
-    bodyHtml,
-    description: 'arXiv 医学图像分割日报首页，直接展示每日内容与历史记录。',
-    bodyClass: 'daily-home',
+    title: `${reportDate} - arXiv 医学图像分割日报`,
+    subtitle: reportDate,
+    bodyClass: 'daily-shell',
+    description: `arXiv 医学图像分割日报 ${reportDate}`,
+    bodyHtml: `
+      <div class="daily-page" id="${escapeHtml(date)}">
+      <div class="daily-page-nav"><a href="/">${'回到首页'}</a> · <a href="${escapeHtml(yearIndexPath(year))}">${escapeHtml(year)}</a> · <a href="${escapeHtml(monthIndexPath(year, month))}">${escapeHtml(month)} 月</a> · <a href="${escapeHtml(reportRelPath(date))}">本文</a></div>
+        <h2 class="daily-title">${escapeHtml(reportDate)}</h2>
+        <p class="daily-page-meta">论文标题：${escapeHtml(title)}</p>
+        <p class="daily-page-links"><a href="${escapeHtml(monthIndexPath(year, month))}">返回本月目录</a> · <a href="${escapeHtml(yearIndexPath(year))}">返回本年目录</a> · <a href="/">返回首页目录</a></p>
+        <div class="markdown-body">${bodyHtml}</div>
+      </div>`,
   });
 }
 
+function renderIndexPage({ reports }) {
+  const grouped = new Map();
+  for (const report of reports) {
+    const { year, month } = splitDate(report.date);
+    if (!grouped.has(year)) grouped.set(year, new Map());
+    const months = grouped.get(year);
+    if (!months.has(month)) months.set(month, []);
+    months.get(month).push(report);
+  }
+
+  const years = [...grouped.entries()].map(([year, months]) => {
+    const monthItems = [...months.entries()].map(([month, items]) => {
+      const days = items.map((item) => `<li><a class="daily-day-link" href="${escapeHtml(reportRelPath(item.date))}">${escapeHtml(item.date)}</a></li>`).join('');
+      return `<li><details open><summary>${escapeHtml(month)} 月</summary><ul>${days}</ul></details></li>`;
+    }).join('');
+    return `<li><details open><summary><a href="${escapeHtml(yearIndexPath(year))}">${escapeHtml(year)}</a></summary><ul>${monthItems}</ul></details></li>`;
+  }).join('');
+
+  const latest = reports[0];
+  return siteShell({
+    title: 'arXiv 医学图像分割日报',
+    subtitle: '按年 / 月 / 日浏览日报',
+    bodyClass: 'daily-shell',
+    description: 'arXiv 医学图像分割日报目录页，按年、月、日组织全部文章。',
+    bodyHtml: `
+      <h2 class="daily-title">日报目录</h2>
+      <p class="daily-subtitle">最新日报：<a href="${escapeHtml(reportRelPath(latest.date))}">${escapeHtml(latest.reportDate)}</a></p>
+      <div class="daily-tree" id="daily-tree">
+        <ul>${years}</ul>
+      </div>`,
+  });
+}
+
+function renderYearPage(year, months) {
+  const monthItems = [...months.entries()].map(([month, items]) => {
+    const latest = items[0];
+    return `<li><a href="${escapeHtml(monthIndexPath(year, month))}">${escapeHtml(month)} 月</a> · 最新：<a href="${escapeHtml(reportRelPath(latest.date))}">${escapeHtml(latest.reportDate)}</a></li>`;
+  }).join('');
+  return siteShell({
+    title: `${year} 年 - arXiv 医学图像分割日报`,
+    subtitle: `${year} 年日报归档`,
+    bodyClass: 'daily-shell',
+    description: `${year} 年的 arXiv 医学图像分割日报归档页。`,
+    bodyHtml: `
+      <h2 class="daily-title">${escapeHtml(year)} 年</h2>
+      <p class="daily-subtitle"><a href="/">返回目录页</a></p>
+      <div class="daily-tree"><ul>${monthItems}</ul></div>`,
+  });
+}
+
+function renderMonthPage(year, month, items) {
+  const dayItems = items.map((item) => `<li><a href="${escapeHtml(reportRelPath(item.date))}">${escapeHtml(item.reportDate)}</a></li>`).join('');
+  return siteShell({
+    title: `${year}-${month} - arXiv 医学图像分割日报`,
+    subtitle: `${year}-${month} 报告列表`,
+    bodyClass: 'daily-shell',
+    description: `${year}-${month} 的 arXiv 医学图像分割日报列表。`,
+    bodyHtml: `
+      <h2 class="daily-title">${escapeHtml(year)}-${escapeHtml(month)}</h2>
+      <p class="daily-subtitle"><a href="${escapeHtml(yearIndexPath(year))}">返回年目录</a> · <a href="/">返回首页</a></p>
+      <div class="daily-tree"><ul>${dayItems}</ul></div>`,
+  });
+}
+
+async function ensureDir(dir) {
+  await fs.mkdir(dir, { recursive: true });
+}
+
 async function writeText(filePath, content) {
+  await ensureDir(path.dirname(filePath));
   await fs.writeFile(filePath, content, 'utf8');
+}
+
+async function removeIfExists(target) {
+  await fs.rm(target, { recursive: true, force: true });
 }
 
 async function loadReports(sourceRoot) {
@@ -356,11 +395,45 @@ async function main() {
   }
 
   const reports = await loadReports(sourceRoot);
-  const homepage = renderHomePage({ reports });
-  await writeText(path.join(repoRoot, 'index.html'), homepage);
-  await fs.rm(path.join(repoRoot, 'arxiv-daily'), { recursive: true, force: true });
+  const latest = reports[0];
+  const groups = new Map();
+  for (const report of reports) {
+    const { year, month } = splitDate(report.date);
+    if (!groups.has(year)) groups.set(year, new Map());
+    const months = groups.get(year);
+    if (!months.has(month)) months.set(month, []);
+    months.get(month).push(report);
+  }
 
-  console.log(`Rendered homepage with ${reports.length} daily report(s).`);
+  await writeText(path.join(repoRoot, 'index.html'), renderIndexPage({ reports }));
+
+  for (const [year, months] of groups.entries()) {
+    await writeText(path.join(repoRoot, year, 'index.html'), renderYearPage(year, months));
+    for (const [month, items] of months.entries()) {
+      await writeText(path.join(repoRoot, year, month, 'index.html'), renderMonthPage(year, month, items));
+      for (const report of items) {
+        const { year: y, month: m, day } = splitDate(report.date);
+        const articleDir = path.join(repoRoot, y, m, day);
+        await writeText(path.join(articleDir, 'index.html'), renderReportPage(report));
+      }
+    }
+  }
+
+  await writeText(
+    path.join(repoRoot, 'README.md'),
+    [
+      '# arXiv Daily Report',
+      '',
+      '- Directory structure: `YYYY/MM/DD/index.html`',
+      '- Homepage: `/index.html`',
+      '- Latest report: `' + reportRelPath(latest.date) + '`',
+      '',
+      'This repository is populated by the local sync script and mirrored to GitHub Pages.',
+      '',
+    ].join('\n'),
+  );
+
+  console.log(`Rendered ${reports.length} daily report page(s).`);
 }
 
 main().catch((err) => {
