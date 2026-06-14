@@ -179,6 +179,9 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
     .daily-home .daily-divider { margin: 1rem 0 1.5rem; border-top: 1px solid rgba(0,0,0,.12); }
     .daily-home .daily-report { padding: 0 0 1.75rem; margin: 0 0 1.75rem; border-bottom: 1px solid rgba(0,0,0,.08); }
     .daily-home .daily-report:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+    .daily-home .daily-report-nav { margin: 0 0 0.35rem; font-size: 0.95rem; }
+    .daily-home .daily-report-nav a { color: #6c757d; text-decoration: none; }
+    .daily-home .daily-report-nav a:hover { text-decoration: underline; }
     .daily-home .daily-report-body { background: transparent; padding: 0; }
     .daily-home .markdown-body { background: transparent; }
     .daily-home .markdown-body h2,
@@ -253,6 +256,7 @@ function siteShell({ title, subtitle, bodyHtml, description, bodyClass = '' }) {
 function renderReportBlock({ date, title, reportDate, bodyHtml }) {
   return `
   <section class="daily-report" id="${escapeHtml(date)}">
+    <div class="daily-report-nav"><a href="#daily-reports">回到目录</a></div>
     <h2 class="daily-report-title">${escapeHtml(reportDate)}</h2>
     <p class="daily-report-meta">论文标题：${escapeHtml(title)}</p>
     <div class="markdown-body daily-report-body">${bodyHtml}</div>
