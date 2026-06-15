@@ -1,11 +1,12 @@
 param(
-  [string]$SourceWorkspace = (Split-Path $RepoRoot -Parent),
   [string]$RepoRoot = (Split-Path $PSScriptRoot -Parent),
+  [string]$SourceWorkspace,
   [int]$ReadyDelayMinutes = 5,
   [switch]$Commit
 )
 
 $ErrorActionPreference = 'Stop'
+$SourceWorkspace = if ($SourceWorkspace) { $SourceWorkspace } else { Split-Path $RepoRoot -Parent }
 $renderScript = Join-Path $PSScriptRoot 'render-daily-site.mjs'
 if (-not (Test-Path -LiteralPath $renderScript)) {
   throw "Missing renderer: $renderScript"
