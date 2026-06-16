@@ -106,14 +106,14 @@
         <p class="daily-page-meta">论文标题：arXiv 医学图像分割日报</p>
         <p class="daily-page-links"><a href="/2026/06/">返回本月目录</a> · <a href="/2026/">返回本年目录</a> · <a href="/">返回首页目录</a></p>
         <div class="markdown-body"><h2>今日筛选结果</h2>
-<p>本次检索共得到 1 篇候选论文，去重后全部保留；其中 0 篇判定为直接相关，1 篇判定为可迁移。</p>
+<p>本次检索共得到 1 篇候选论文，去重后全部保留。其中 邻近任务 1 篇。今天的主线是 序列进展预测。</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>序号</th>
 <th>归类</th>
 <th>arXiv ID</th>
 <th>论文名</th>
-<th>相关性判断</th>
+<th>核心问题</th>
 <th>为什么保留</th>
 </tr></thead><tbody>
 <tr>
@@ -126,44 +126,50 @@
 </tr>
 <tr>
 <td>1</td>
-<td>可迁移</td>
+<td>邻近任务</td>
 <td>2606.09140v1</td>
 <td>DiffSight-Former: Modeling Structural Differences and Temporal Dynamics for Glaucoma Progression Prediction</td>
-<td>序列眼底进展建模。</td>
-<td>序列眼底进展建模。</td>
+<td>序列进展预测</td>
+<td>它不是分割本身，但把结构差异和时间动态引进了眼底长期随访，和分割后的病程分析关系很近。</td>
 </tr>
 </tbody></table></div>
-<h2>总体判断</h2>
+<h2>今日判断</h2>
 <ol>
-<li>今天的关键词窗口内主要聚焦在半监督质量控制、跨域标注选择和数据集知识卡。</li>
-<li>对眼底分割最直接的是 XSSR 和 Quality-Guided SSL，MS-DKC 适合做任务分析框架。</li>
-<li>6 月 3 日和 6 月 7 日的条目更偏具体方法，后续值得串起来看。</li>
+<li>DiffSight-Former 不再只看单帧，而是把结构差异和时间动态一起建模。</li>
+<li>对青光眼这种长期进展任务来说，optic disc/cup 和血管变化比单张图像更有信息。</li>
+<li>它更像一个分割后的病程模块，而不是直接替代分割器。</li>
 </ol>
 <h2>逐篇精读</h2>
 <h2>1. DiffSight-Former: Modeling Structural Differences and Temporal Dynamics for Glaucoma Progression Prediction</h2>
 <ul>
 <li>arXiv ID: 2606.09140v1</li>
-<li>Date: 2026-06-08</li>
-<li>URL: https://arxiv.org/abs/2606.09140</li>
-<li>Category: 可迁移</li>
-<li>Keep reason: 序列眼底进展建模。</li>
+<li>原始链接: https://arxiv.org/abs/2606.09140</li>
+<li>归类: 邻近任务</li>
+<li>核心问题: 序列进展预测</li>
+<li>发布时间: 2026-06-08T07:39:10Z</li>
+<li>保留理由: 它不是分割本身，但把结构差异和时间动态引进了眼底长期随访，和分割后的病程分析关系很近。</li>
 </ul>
-<h2>Source Note</h2>
-<p>关注随访序列中的结构差异和时间动态。</p>
-<h2>Analysis</h2>
-<p>背景：青光眼进展预测依赖随访 fundus images，而不是单张图。</p>
-<p>方法：fundus-specific foundation model + multi-structure difference modeling + time-aware Transformer。</p>
-<p>训练：SIGF 和 GRAPE 两个纵向数据集。</p>
-<p>数据：SIGF、GRAPE。</p>
-<p>创新：把 optic disc/cup 区域差异和 retinal vasculature 变化显式作为 progression signal。</p>
-<p>实验与结果：AUC 和 sensitivity 表现较好。</p>
-<p>局限：不是分割任务。</p>
-<p>对眼底分割的可用性：适合做分割后的疾病进展模块。</p>
-<h2>领域进展速览</h2>
+<h3>背景</h3>
+<p>青光眼进展预测依赖纵向随访，而不是单张图像。问题在于很多序列模型只能看固定长度输入，或者只能识别已经很明显的病变。</p>
+<h3>方法拆解</h3>
+<p>DiffSight-Former 用 time-variant feature extraction 提取稳健结构表示，再显式建模 optic disc/cup 和 retinal vasculature 的变化，最后把时间间隔编码送入 time-aware Transformer。</p>
+<h3>训练与数据</h3>
+<p>作者在 SIGF 和 GRAPE 两个纵向数据集上训练，分别包含 405 和 263 个序列，说明它确实是在序列级别做进展预测。</p>
+<h3>创新点</h3>
+<p>它把结构差异和时间动态放在同一个框架里，而不是只盯单帧分类。</p>
+<h3>实验与结果</h3>
+<p>在 SIGF 上 AUC 达到 91.54%，敏感度 92.16%；在 GRAPE 上，三种临床进展标准的平均准确率达到 87.48%。</p>
+<h3>局限</h3>
+<p>这是进展预测而不是分割，所以它对单帧掩码的直接帮助有限，更适合作为分割后的病程模块。</p>
+<h3>对医学图像分割的启发</h3>
+<p>如果后续要做眼底纵向分析或把分割结果接到病程预测，这篇提供了很好的序列建模模板。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇的价值在于把“看一次图像”推进到“看一段变化”。</p>
+<h2>跨日趋势</h2>
 <ol>
-<li>标注效率和伪标签质量是这几天最稳定的主线。</li>
-<li>如果后续要做新医院/新设备，XSSR 这类样本选择值得先试。</li>
-<li>如果后续要做半监督眼底分割，Quality-Guided SSL 是最直接的加法。</li>
+<li>这一天让“分割结果之后还能做什么”变得更具体：时间维度可以把结构变化变成临床风险信号。</li>
+<li>如果未来做纵向眼底分析，这种时序建模会比静态分类更接近医生的随访思路。</li>
+<li>它和 6 月 3 日的 AMD 分期很搭：一个把结构变成 biomarker，一个把时间变化变成进展概率。</li>
 </ol>
 <h2>归档说明</h2>
 <p>原始论文材料与报告已按日期和论文名归档到 reference/2026-06-08/。</p></div>

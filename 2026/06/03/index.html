@@ -106,14 +106,14 @@
         <p class="daily-page-meta">论文标题：arXiv 医学图像分割日报</p>
         <p class="daily-page-links"><a href="/2026/06/">返回本月目录</a> · <a href="/2026/">返回本年目录</a> · <a href="/">返回首页目录</a></p>
         <div class="markdown-body"><h2>今日筛选结果</h2>
-<p>本次检索共得到 5 篇候选论文，去重后全部保留；其中 3 篇判定为直接相关，2 篇判定为可迁移。</p>
+<p>本次检索共得到 6 篇候选论文，去重后全部保留。其中 直接相关 3 篇，方法论 1 篇，可迁移 1 篇，邻近任务 1 篇。今天的主线是 标注效率、提示增强与轻量部署。</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>序号</th>
 <th>归类</th>
 <th>arXiv ID</th>
 <th>论文名</th>
-<th>相关性判断</th>
+<th>核心问题</th>
 <th>为什么保留</th>
 </tr></thead><tbody>
 <tr>
@@ -129,149 +129,212 @@
 <td>直接相关</td>
 <td>2606.04301v1</td>
 <td>XSSR: Cross-Domain Self-Supervised Representative Selection for Efficient Annotation in Medical Image Segmentation</td>
-<td>直接命中眼底场景：RIGA+ retinal fundus imaging，且主题是跨域标注效率。</td>
-<td>直接命中眼底场景：RIGA+ retinal fundus imaging，且主题是跨域标注效率。</td>
+<td>跨域标注效率</td>
+<td>它直接命中眼底和多中心标注预算问题，且把“先标谁”变成了可优化决策。</td>
 </tr>
 <tr>
 <td>2</td>
-<td>可迁移</td>
-<td>2606.04705v1</td>
-<td>Enhancing MedSAM with a Lightweight Box Predictor for Medical Image Segmentation</td>
-<td>SAM/MedSAM 的提示增强，对提示不稳定的眼底任务很有迁移价值。</td>
-<td>SAM/MedSAM 的提示增强，对提示不稳定的眼底任务很有迁移价值。</td>
+<td>方法论</td>
+<td>2606.04427v1</td>
+<td>Implicit Fuzzification via Bounded Noise Injection for Robust Medical Image Segmentation</td>
+<td>边界模糊建模</td>
+<td>它把边界不确定性显式化，适合低对比、弱边界和细结构任务。</td>
 </tr>
 <tr>
 <td>3</td>
-<td>直接相关</td>
-<td>2606.05354v1</td>
-<td>LightVesselNet: An Ultra-Lightweight Sub-100K Parameter Network for Retinal Blood Vessel Segmentation</td>
-<td>眼底血管分割的轻量部署方向，非常直接。</td>
-<td>眼底血管分割的轻量部署方向，非常直接。</td>
+<td>可迁移</td>
+<td>2606.04705v1</td>
+<td>Enhancing MedSAM with a Lightweight Box Predictor for Medical Image Segmentation</td>
+<td>交互式提示增强</td>
+<td>单点提示太不稳，粗框先验对眼底这类弱对比目标很有用。</td>
 </tr>
 <tr>
 <td>4</td>
 <td>直接相关</td>
-<td>2606.05375v1</td>
-<td>Three-Dimensional Retinal Microvasculature Restoration in OCT Angiography</td>
-<td>OCTA 三维微血管恢复，和眼底细结构保真高度相关。</td>
-<td>OCTA 三维微血管恢复，和眼底细结构保真高度相关。</td>
+<td>2606.05354v1</td>
+<td>LightVesselNet: An Ultra-Lightweight Sub-100K Parameter Network for Retinal Blood Vessel Segmentation</td>
+<td>轻量化部署</td>
+<td>它把部署性放到架构中心，对移动筛查和低资源环境很实用。</td>
 </tr>
 <tr>
 <td>5</td>
-<td>可迁移</td>
+<td>直接相关</td>
+<td>2606.05375v1</td>
+<td>Three-Dimensional Retinal Microvasculature Restoration in OCT Angiography</td>
+<td>OCTA 三维重建</td>
+<td>它不是只做降噪，而是恢复 3D 微血管结构，和眼底微循环保真高度相关。</td>
+</tr>
+<tr>
+<td>6</td>
+<td>邻近任务</td>
 <td>2606.05379v1</td>
 <td>Deep Learning-assisted AMD Staging based on OCT and OCT Angiography</td>
-<td>病灶分割到分期的中间层设计，适合后续眼底病变流程。</td>
-<td>病灶分割到分期的中间层设计，适合后续眼底病变流程。</td>
+<td>病灶到分期</td>
+<td>它把分割输出转成生物标志物，再做分期，说明结构分割可以服务更高层临床判断。</td>
 </tr>
 </tbody></table></div>
-<h2>总体判断</h2>
+<h2>今日判断</h2>
 <ol>
-<li>今天的关键词窗口内主要聚焦在半监督质量控制、跨域标注选择和数据集知识卡。</li>
-<li>对眼底分割最直接的是 XSSR 和 Quality-Guided SSL，MS-DKC 适合做任务分析框架。</li>
-<li>6 月 3 日和 6 月 7 日的条目更偏具体方法，后续值得串起来看。</li>
+<li>XSSR 解决的是“先标谁”，把有限标注预算花在最有代表性的病例上。</li>
+<li>Implicit Fuzzification 解决的是“边界为什么会糊”，把不确定性显式化。</li>
+<li>MedSAM Box Predictor 和 LightVesselNet 则分别从交互提示和部署效率两端，把系统变得更可用。</li>
 </ol>
 <h2>逐篇精读</h2>
 <h2>1. XSSR: Cross-Domain Self-Supervised Representative Selection for Efficient Annotation in Medical Image Segmentation</h2>
 <ul>
 <li>arXiv ID: 2606.04301v1</li>
-<li>Date: 2026-06-03</li>
-<li>URL: https://arxiv.org/abs/2606.04301</li>
-<li>Category: 直接相关</li>
-<li>Keep reason: 直接命中眼底场景：RIGA+ retinal fundus imaging，且主题是跨域标注效率。</li>
+<li>原始链接: https://arxiv.org/abs/2606.04301</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 跨域标注效率</li>
+<li>发布时间: 2026-06-03T00:09:35Z</li>
+<li>保留理由: 它直接命中眼底和多中心标注预算问题，且把“先标谁”变成了可优化决策。</li>
 </ul>
-<h2>Source Note</h2>
-<p>用源域 MAE 表征 + 目标域贪心代表性选择，在 5% 标注预算下维持分割性能。</p>
-<h2>Analysis</h2>
-<p>背景：跨设备、跨中心时，医学分割最大的成本往往不是模型容量，而是目标域标注预算。对眼底分割来说，这个问题尤其突出。</p>
-<p>方法：先在无标注源域上训练 Masked Autoencoder 建共享 embedding；再用密度-新颖性-多样性联合评分对目标域样本做贪心选择；最后只用被选中的子集训练 U-Net。</p>
-<p>训练：固定 5% 标注预算，并自动调节 novelty-diversity 权重。</p>
-<p>数据：Chest X-ray、RIGA+ retinal fundus imaging、multi-site Prostate MRI。</p>
-<p>创新：把“选哪些目标样本去标”显式变成可优化问题。</p>
-<p>实验与结果：在 Chest X-ray 上用 22 张标注图就达到全量性能的 99.3%；Prostate MRI 上比随机选择高最多 2.5 Dice；整体比 CoreSet 高 0.4 到 1.2 Dice。</p>
-<p>局限：仍依赖源域 embedding 的质量，fundus 只在 RIGA+ 上验证。</p>
-<p>对眼底分割的可用性：特别适合眼底多中心新医院/新设备的优先标注排序。</p>
-<h2>2. Enhancing MedSAM with a Lightweight Box Predictor for Medical Image Segmentation</h2>
+<h3>背景</h3>
+<p>跨设备、跨中心时，医学分割最贵的往往不是模型，而是目标域标注。对眼底场景尤其如此，因为不同医院和相机的分布差异会让少量标注的价值差异非常大。</p>
+<h3>方法拆解</h3>
+<p>XSSR 先在无标注源域上训练 Masked Autoencoder 建共享 embedding，再对目标域样本做密度、新颖性和多样性联合评分，最后只用被选中的子集训练 U-Net。</p>
+<h3>训练与数据</h3>
+<p>作者固定 5% 标注预算，并自动校准 novelty-diversity 权重，避免人工调参。数据覆盖 Chest X-ray、RIGA+ retinal fundus imaging 和 multi-site Prostate MRI。</p>
+<h3>创新点</h3>
+<p>它把“选择哪些目标样本去标注”显式变成了一个优化问题，而不是经验驱动的随机采样。</p>
+<h3>实验与结果</h3>
+<p>在 Chest X-ray 上只用 22 张标注图就达到全量性能的 99.3%，在 Prostate MRI 上比随机选择最高多 2.5 Dice，整体也稳定优于 CoreSet。</p>
+<h3>局限</h3>
+<p>它仍然依赖源域 embedding 的质量；如果源域表征不稳，后续样本选择也会偏。</p>
+<h3>对医学图像分割的启发</h3>
+<p>非常适合眼底多中心新医院、新设备的优先标注排序，也适合把有限标注预算投到最有代表性的病例上。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇最实用的地方在于它直接回答了“先标哪些样本最值”这个真实问题。</p>
+<h2>2. Implicit Fuzzification via Bounded Noise Injection for Robust Medical Image Segmentation</h2>
+<ul>
+<li>arXiv ID: 2606.04427v1</li>
+<li>原始链接: https://arxiv.org/abs/2606.04427</li>
+<li>归类: 方法论</li>
+<li>核心问题: 边界模糊建模</li>
+<li>发布时间: 2026-06-03T04:17:15Z</li>
+<li>保留理由: 它把边界不确定性显式化，适合低对比、弱边界和细结构任务。</li>
+</ul>
+<h3>背景</h3>
+<p>分割中的边界模糊，很多时候不是模型不够强，而是采样和标注本身就带来了过渡区的不确定性。尤其是超声、低对比器官和细血管场景，边界往往天然不是硬切的。</p>
+<h3>方法拆解</h3>
+<p>NoiseUNet 在 skip connections 上注入 bounded perturbations，借此正则化跨尺度特征融合，让高分辨率信息在被重新拼接时更稳健。</p>
+<h3>训练与数据</h3>
+<p>作者还构造了 ThyR 甲状腺超声数据集，用真实存在边界歧义的图像来验证这种噪声注入是否真的能提升边界质量。</p>
+<h3>创新点</h3>
+<p>理论上它把噪声解释成一种 implicit fuzzification：模型不再输出硬边界式 membership，而是在过渡区学到软 membership。</p>
+<h3>实验与结果</h3>
+<p>实验显示 NoiseUNet 不仅提升了整体分割精度，也提升了边界保真度，说明这种噪声并不是纯正则，而是有结构意义的扰动。</p>
+<h3>局限</h3>
+<p>它依赖噪声分布和边界任务匹配得足够好；如果噪声过强，反而会破坏细边界的恢复。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对眼底血管、甲状腺、病灶边缘这类“看得见但很模糊”的结构都很适用。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇的核心价值在于提醒我们：很多边界问题不是要“更硬”，而是要“更会处理模糊”。</p>
+<h2>3. Enhancing MedSAM with a Lightweight Box Predictor for Medical Image Segmentation</h2>
 <ul>
 <li>arXiv ID: 2606.04705v1</li>
-<li>Date: 2026-06-03</li>
-<li>URL: https://arxiv.org/abs/2606.04705</li>
-<li>Category: 可迁移</li>
-<li>Keep reason: SAM/MedSAM 的提示增强，对提示不稳定的眼底任务很有迁移价值。</li>
+<li>原始链接: https://arxiv.org/abs/2606.04705</li>
+<li>归类: 可迁移</li>
+<li>核心问题: 交互式提示增强</li>
+<li>发布时间: 2026-06-03T10:34:15Z</li>
+<li>保留理由: 单点提示太不稳，粗框先验对眼底这类弱对比目标很有用。</li>
 </ul>
-<h2>Source Note</h2>
-<p>把 prompt 从“单点”升级为“点到框”的两阶段空间引导。</p>
-<h2>Analysis</h2>
-<p>背景：SAM/MedSAM 在医学图像上常被 prompt 质量限制，单点提示对小、弱对比、边界模糊目标尤其不稳。</p>
-<p>方法：在 MedSAM 上加轻量 Box Predictor，从单点估计粗框，再把框作为额外空间先验输入。</p>
-<p>训练：Box Predictor 先单独训练，再与 MedSAM 组合。</p>
-<p>数据：FLARE22、BRISC、BUSI、LungSegDB。</p>
-<p>创新：把 prompt 从单点升级为粗框。</p>
-<p>实验与结果：相对 baseline MedSAM 在多数据集上提升稳定性和精度。</p>
-<p>局限：当目标非常清晰时，额外框可能带来干扰。</p>
-<p>对眼底分割的可用性：对眼底里“点提示不够准”的交互式分割很有迁移价值。</p>
-<h2>3. LightVesselNet: An Ultra-Lightweight Sub-100K Parameter Network for Retinal Blood Vessel Segmentation</h2>
+<h3>背景</h3>
+<p>SAM / MedSAM 在医学图像上常被 prompt 质量限制。单点提示对小目标、弱对比目标和边界模糊目标尤其不稳，实际临床里往往很难一次点准。</p>
+<h3>方法拆解</h3>
+<p>作者在 MedSAM 上加了一个轻量 Box Predictor，从单点估计粗框，再把粗框作为额外空间先验输入主模型。</p>
+<h3>训练与数据</h3>
+<p>Box Predictor 先单独训练，再与 MedSAM 组合；方法只增加约 1.6M 参数，推理开销很小。</p>
+<h3>创新点</h3>
+<p>它把 prompt 从“单点”升级为“点到框”的两阶段空间引导，提升了 prompt 的容错性。</p>
+<h3>实验与结果</h3>
+<p>在 FLARE22、BRISC、BUSI 和 LungSegDB 上都报告了更稳的 Dice 和更强的鲁棒性，尤其对 off-center click 更友好。</p>
+<h3>局限</h3>
+<p>当目标本来就非常清楚时，额外框先验偶尔会带来干扰；它还是偏提示依赖的交互式方案。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对眼底里“点提示不够准”的交互式分割很有迁移价值，尤其适合弱对比、边界不清的病灶。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这类工作很适合做成通用插件，因为它解决的是提示系统的稳定性，而不是重新发明整套分割器。</p>
+<h2>4. LightVesselNet: An Ultra-Lightweight Sub-100K Parameter Network for Retinal Blood Vessel Segmentation</h2>
 <ul>
 <li>arXiv ID: 2606.05354v1</li>
-<li>Date: 2026-06-03</li>
-<li>URL: https://arxiv.org/abs/2606.05354</li>
-<li>Category: 直接相关</li>
-<li>Keep reason: 眼底血管分割的轻量部署方向，非常直接。</li>
+<li>原始链接: https://arxiv.org/abs/2606.05354</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 轻量化部署</li>
+<li>发布时间: 2026-06-03T18:56:13Z</li>
+<li>保留理由: 它把部署性放到架构中心，对移动筛查和低资源环境很实用。</li>
 </ul>
-<h2>Source Note</h2>
-<p>75K 参数的轻量网络，专门面向资源受限环境。</p>
-<h2>Analysis</h2>
-<p>背景：视网膜血管分割在早筛糖网和青光眼中非常关键，但很多模型太重，不适合边缘部署。</p>
-<p>方法：紧凑 encoder-decoder，加 channel/spatial attention、多尺度 bottleneck、subpixel upsampling 和 edge residual connection。</p>
-<p>训练：在 DRIVE、STARE、CHASEDB1、FIVES、HRF 上评估。</p>
-<p>数据：五个公开 fundus 数据集。</p>
-<p>创新：把部署性放到架构中心。</p>
-<p>实验与结果：Dice 和 sensitivity 在五个数据集上都保持竞争力。</p>
-<p>局限：跨域泛化仍需要更多验证。</p>
-<p>对眼底分割的可用性：最适合做眼底血管分割的轻量基线。</p>
-<h2>4. Three-Dimensional Retinal Microvasculature Restoration in OCT Angiography</h2>
+<h3>背景</h3>
+<p>视网膜血管分割在糖网和青光眼早筛里很关键，但很多模型太重，难以放到边缘设备或基层筛查流程里。</p>
+<h3>方法拆解</h3>
+<p>LightVesselNet 用紧凑 encoder-decoder 结构，结合 channel/spatial attention、多尺度 bottleneck、subpixel upsampling 和 edge residual connection 来保住细血管。</p>
+<h3>训练与数据</h3>
+<p>作者在 DRIVE、STARE、CHASEDB1、FIVES 和 HRF 五个公开 fundus 数据集上做评估，重点看精度与参数量、FLOPs 的平衡。</p>
+<h3>创新点</h3>
+<p>它不是事后压缩大模型，而是从一开始就按 retinal vessel segmentation 的部署约束来设计架构。</p>
+<h3>实验与结果</h3>
+<p>在五个数据集上都给出了竞争力的 Dice / Sensitivity，同时在参数规模上只有约 75K，效率优势非常明显。</p>
+<h3>局限</h3>
+<p>跨域泛化仍然需要更多验证；目前它更像一个强轻量基线，而不是所有场景的最终答案。</p>
+<h3>对医学图像分割的启发</h3>
+<p>最适合拿来做眼底血管分割的轻量化基线，也适合移动筛查和资源受限的临床环境。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇提醒我们：如果目标就是基层部署，轻量化本身就是方法创新的一部分。</p>
+<h2>5. Three-Dimensional Retinal Microvasculature Restoration in OCT Angiography</h2>
 <ul>
 <li>arXiv ID: 2606.05375v1</li>
-<li>Date: 2026-06-03</li>
-<li>URL: https://arxiv.org/abs/2606.05375</li>
-<li>Category: 直接相关</li>
-<li>Keep reason: OCTA 三维微血管恢复，和眼底细结构保真高度相关。</li>
+<li>原始链接: https://arxiv.org/abs/2606.05375</li>
+<li>归类: 直接相关</li>
+<li>核心问题: OCTA 三维重建</li>
+<li>发布时间: 2026-06-03T19:23:09Z</li>
+<li>保留理由: 它不是只做降噪，而是恢复 3D 微血管结构，和眼底微循环保真高度相关。</li>
 </ul>
-<h2>Source Note</h2>
-<p>直接恢复 3D retinal microvasculature，而不是只做降噪或投影伪影去除。</p>
-<h2>Analysis</h2>
-<p>背景：OCTA 的关键问题不是单纯噪声，而是伪影和体积内真实血管架构被 2D 处理抹掉。</p>
-<p>方法：使用 EfficientNet-B5 encoder 和带 concurrent spatial/channel SE 的 decoder，输入相邻 3 个 B-frame，预测中间 B-frame。</p>
-<p>训练：输入来自单个 OCTA volume 的邻近 B-frame；reference ground truth 由多次扫描平均得到。</p>
-<p>数据：多种 vascular slabs 上开展。</p>
-<p>创新：直接恢复 3D retinal microvasculature 的解剖结构。</p>
-<p>实验与结果：用 PSNR、SSIM 和 Dice 评估恢复质量。</p>
-<p>局限：依赖体积邻域输入和多次扫描平均作为参照。</p>
-<p>对眼底分割的可用性：非常适合迁移成眼底微血管补全或 OCTA 体积重建模块。</p>
-<h2>5. Deep Learning-assisted AMD Staging based on OCT and OCT Angiography</h2>
+<h3>背景</h3>
+<p>OCTA 的问题不只是噪声，还有把本来三维的血管结构压扁成二维后，解剖连通性和局部形态都被削弱。</p>
+<h3>方法拆解</h3>
+<p>模型采用 EfficientNet-B5 encoder 和带 spatial/channel SE 的 decoder，输入相邻三帧 B-frame，输出中间帧的恢复结果。</p>
+<h3>训练与数据</h3>
+<p>参考真值由多次扫描平均得到，实验用 PSNR、SSIM 和 microvascular fidelity 的 Dice 共同评价，不只是盯图像质量。</p>
+<h3>创新点</h3>
+<p>它直接面向 3D retinal microvasculature 的结构恢复，而不是只做表观去噪。</p>
+<h3>实验与结果</h3>
+<p>PSNR 从 22.23 提升到 26.16，SSIM 从 0.72 提升到 0.91，2D / 3D microvascular fidelity 的 Dice 也分别至少提升 3.8% 和 51.2%。</p>
+<h3>局限</h3>
+<p>方法依赖体积邻域输入和多次扫描平均真值，单帧或极低信噪场景还要继续验证。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对 OCTA 微血管补全、体积重建和细血管连通性保持都很有价值。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇的重点不只是画得更清楚，而是把“保住三维结构”当成首要目标。</p>
+<h2>6. Deep Learning-assisted AMD Staging based on OCT and OCT Angiography</h2>
 <ul>
 <li>arXiv ID: 2606.05379v1</li>
-<li>Date: 2026-06-03</li>
-<li>URL: https://arxiv.org/abs/2606.05379</li>
-<li>Category: 可迁移</li>
-<li>Keep reason: 病灶分割到分期的中间层设计，适合后续眼底病变流程。</li>
+<li>原始链接: https://arxiv.org/abs/2606.05379</li>
+<li>归类: 邻近任务</li>
+<li>核心问题: 病灶到分期</li>
+<li>发布时间: 2026-06-03T19:28:35Z</li>
+<li>保留理由: 它把分割输出转成生物标志物，再做分期，说明结构分割可以服务更高层临床判断。</li>
 </ul>
-<h2>Source Note</h2>
-<p>把病灶分割结果转成 biomarker maps，再用于分期。</p>
-<h2>Analysis</h2>
-<p>背景：论文目标是基于 OCT/OCTA 自动分期 AMD，重点不是直接做分割，而是把分割出的病理特征转成 biomarker maps。</p>
-<p>方法：三条输入路线分别是 biomarker maps、2D en face OCT/OCTA、以及 3D OCT/OCTA volumes，均使用 EfficientNet-based architectures。</p>
-<p>训练：271 participants、2030 volumes，采用 five-fold cross-validation 和标准化预处理。</p>
-<p>数据：中心 6x6 mm OCT/OCTA volumes，共 2030 volumes 来自 271 participants。</p>
-<p>创新：把病灶分割结果转成 biomarker maps，再用于分期。</p>
-<p>实验与结果：比较 biomarker-based、2D 和 3D 三类模型，指标用 QWK、F1-score 和 precision。</p>
-<p>局限：任务是分期而非分割，且对前置 segmentation 质量有依赖。</p>
-<p>对眼底分割的可用性：适合迁移成眼底病灶分割 + 分层联合任务。</p>
-<h2>领域进展速览</h2>
+<h3>背景</h3>
+<p>这篇并不是直接做分割，但它清楚展示了一个很重要的临床路径：结构分割不是终点，而是病程判断和分期的中间层。</p>
+<h3>方法拆解</h3>
+<p>作者比较了三条输入路线：病灶生物标志物 map、2D en face OCT/OCTA 投影和 3D OCT/OCTA volumes，均使用 EfficientNet-based architectures。</p>
+<h3>训练与数据</h3>
+<p>数据来自 271 名受试者、2030 个 volume，采用 five-fold cross-validation 和标准化预处理，分期依据 AREDS simplified severity scale。</p>
+<h3>创新点</h3>
+<p>它把分割结果先转成 biomarker maps，再做分期，说明结构分割可以是病程判断的中间层，而不是终端输出。</p>
+<h3>实验与结果</h3>
+<p>所有模型都达到 QWK &gt;= 0.83，其中 biomarker-based 模型最好，QWK 为 0.85 ± 0.03，早期 AMD 的 F1 也最好。</p>
+<h3>局限</h3>
+<p>这是分期任务而不是分割任务，因此性能非常依赖前置 segmentation 的质量与稳定性。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对眼底项目很有启发：如果分割结果要进临床流程，最好把它明确转成可解释的 biomarkers。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇最值得借鉴的地方，是把“分割之后怎么办”这件事讲得很清楚。</p>
+<h2>跨日趋势</h2>
 <ol>
-<li>标注效率和伪标签质量是这几天最稳定的主线。</li>
-<li>如果后续要做新医院/新设备，XSSR 这类样本选择值得先试。</li>
-<li>如果后续要做半监督眼底分割，Quality-Guided SSL 是最直接的加法。</li>
+<li>这一天的主题非常完整：从样本选择、边界建模到提示增强和轻量部署，几乎覆盖了一个医学分割项目从训练到落地的全链条。</li>
+<li>OCTA 重建和 AMD 分期说明眼底结构信息不只是拿来分割，也可以转成更高层临床判断。</li>
+<li>如果后续要做眼底多中心落地，这一天的几篇论文可以拼成一条很实用的工作流。</li>
 </ol>
 <h2>归档说明</h2>
 <p>原始论文材料与报告已按日期和论文名归档到 reference/2026-06-03/。</p></div>

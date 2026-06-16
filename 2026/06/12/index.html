@@ -106,14 +106,14 @@
         <p class="daily-page-meta">论文标题：arXiv 医学图像分割日报</p>
         <p class="daily-page-links"><a href="/2026/06/">返回本月目录</a> · <a href="/2026/">返回本年目录</a> · <a href="/">返回首页目录</a></p>
         <div class="markdown-body"><h2>今日筛选结果</h2>
-<p>本次按提交时间、更新时间以及 fundus / retinal / segmentation / OCTA / optic disc / optic cup 关键词检索后，没有发现 2026-06-12 新增且满足收录条件的论文；去重后保留 0 篇，其中直接相关 0 篇，可迁移 0 篇。随后又按最新分割论文总列表倒查，仍未找到今天值得纳入正式列表的条目。</p>
+<p>本次检索共得到 1 篇候选论文，去重后全部保留。其中 直接相关 1 篇。今天的主线是 图结构血管检测。</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>序号</th>
 <th>归类</th>
 <th>arXiv ID</th>
 <th>论文名</th>
-<th>相关性判断</th>
+<th>核心问题</th>
 <th>为什么保留</th>
 </tr></thead><tbody>
 <tr>
@@ -125,22 +125,54 @@
 <td>---</td>
 </tr>
 <tr>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>-</td>
-<td>今日未检出满足条件的新增论文。</td>
+<td>1</td>
+<td>直接相关</td>
+<td>2606.14828v1</td>
+<td>Leptomeningeal Collateral Detection on DSA via Vessel-Graph Neural Networks</td>
+<td>图结构血管检测</td>
+<td>它把血管从整幅 mask 提升到 per-vessel segment level，很适合结构化血管分析。</td>
 </tr>
 </tbody></table></div>
-<h2>总体判断</h2>
+<h2>今日判断</h2>
 <ol>
-<li>今天没有新增可收录论文。</li>
-<li>继续观察前几天的基线方向：轻量化、细血管连通性和跨域鲁棒性。</li>
-<li>这反映的是检索窗口内的真实空缺，而不是筛选失效。</li>
+<li>DSA 里的侧支血管太小，直接做整图分割并不能回答临床真正关心的问题。</li>
+<li>把血管树转成 graph，再做 per-vessel segment classification，是这篇最关键的思路。</li>
+<li>它把血管分析从“看整张图”推进到“看每一段血管”。</li>
+</ol>
+<h2>逐篇精读</h2>
+<h2>1. Leptomeningeal Collateral Detection on DSA via Vessel-Graph Neural Networks</h2>
+<ul>
+<li>arXiv ID: 2606.14828v1</li>
+<li>原始链接: https://arxiv.org/abs/2606.14828</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 图结构血管检测</li>
+<li>发布时间: 2026-06-12T14:31:43Z</li>
+<li>保留理由: 它把血管从整幅 mask 提升到 per-vessel segment level，很适合结构化血管分析。</li>
+</ul>
+<h3>背景</h3>
+<p>DSA 里单条侧支血管太小，CTA 常常看不清；而只做整幅血管分割，又很难回答“哪一段才是真正的 collateral”。</p>
+<h3>方法拆解</h3>
+<p>作者先把 DSA 上可见血管构造成 graph，再用 hybrid graph-pixel architecture 在共享 node-probability space 中联合推理。</p>
+<h3>训练与数据</h3>
+<p>数据来自 MAGIC 和 DIAS，前者提供 136 张有侧支标注的 AP frames，后者提供 60 个 DSA 序列并补充血管分割监督。</p>
+<h3>创新点</h3>
+<p>它不是把 collateral 当成全图属性，而是把它当成图节点分类问题，这使得结果更接近临床逐支分析。</p>
+<h3>实验与结果</h3>
+<p>五折交叉验证下，融合模型的 PR-AUC 达到 0.434，优于 graph-only 的 0.403 和 pixel-only 的 0.362。</p>
+<h3>局限</h3>
+<p>目前还是 proof-of-concept，而且主要集中在 AP view，临床推广还要补更多视角和更多病例。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对眼底以外的血管分析很有启发，也说明“分割 + 图推理”可以自然连接到更细粒度的血管判读。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇代表了从“分割一整张血管树”到“分段评分血管树”的自然演进。</p>
+<h2>跨日趋势</h2>
+<ol>
+<li>这一天代表的是血管结构分析的下一步：不只是分割血管，而是理解血管网络中的关键段。</li>
+<li>它和眼底血管分割的关系很近，因为很多结构化血管问题最后都会走向 graph 或 topology。</li>
+<li>如果后续要做更精细的血管病灶分析，这类方法会比整图 mask 更接近临床问法。</li>
 </ol>
 <h2>归档说明</h2>
-<p>原始论文材料与报告已按日期归档到 reference/2026-06-12/。</p></div>
+<p>原始论文材料与报告已按日期和论文名归档到 reference/2026-06-12/。</p></div>
       </div></div>
         </div>
       </div>

@@ -106,14 +106,14 @@
         <p class="daily-page-meta">论文标题：arXiv 医学图像分割日报</p>
         <p class="daily-page-links"><a href="/2026/06/">返回本月目录</a> · <a href="/2026/">返回本年目录</a> · <a href="/">返回首页目录</a></p>
         <div class="markdown-body"><h2>今日筛选结果</h2>
-<p>本次检索共得到 1 篇候选论文，去重后全部保留；其中 1 篇判定为直接相关，0 篇判定为可迁移。</p>
+<p>本次检索共得到 3 篇候选论文，去重后全部保留。其中 直接相关 3 篇。今天的主线是 训练鲁棒化与检索增强。</p>
 <div class="table-wrap"><table>
 <thead><tr>
 <th>序号</th>
 <th>归类</th>
 <th>arXiv ID</th>
 <th>论文名</th>
-<th>相关性判断</th>
+<th>核心问题</th>
 <th>为什么保留</th>
 </tr></thead><tbody>
 <tr>
@@ -129,41 +129,113 @@
 <td>直接相关</td>
 <td>2606.03069v1</td>
 <td>ROBUST-WT: Robust Uncertainty-aware Segmentation Transform via Whitening and Training Enhancements</td>
-<td>眼底视盘分割与跨域鲁棒训练。</td>
-<td>眼底视盘分割与跨域鲁棒训练。</td>
+<td>训练鲁棒化</td>
+<td>它直接针对跨设备、跨协议下的分割退化，属于很典型的分割训练层改进。</td>
+</tr>
+<tr>
+<td>2</td>
+<td>直接相关</td>
+<td>2510.09953v3</td>
+<td>J-RAS: Mutual Adaptation for Medical Image Segmentation via Contrastive Retrieval-Augmented Joint Optimization</td>
+<td>检索增强分割</td>
+<td>把检索和分割联合优化，比固定检索库或被动相似度检索更能服务边界恢复。</td>
+</tr>
+<tr>
+<td>3</td>
+<td>直接相关</td>
+<td>2606.14731v1</td>
+<td>BBR-Net: Boundary-Balanced Replay for Continual Medical Image Segmentation</td>
+<td>连续学习中的结构记忆</td>
+<td>它把 replay 的核心从“记住外观”改成“保住解剖结构”，很适合医学分割。</td>
 </tr>
 </tbody></table></div>
-<h2>总体判断</h2>
+<h2>今日判断</h2>
 <ol>
-<li>今天的关键词窗口内主要聚焦在半监督质量控制、跨域标注选择和数据集知识卡。</li>
-<li>对眼底分割最直接的是 XSSR 和 Quality-Guided SSL，MS-DKC 适合做任务分析框架。</li>
-<li>6 月 3 日和 6 月 7 日的条目更偏具体方法，后续值得串起来看。</li>
+<li>ROBUST-WT 说明很多性能差距本质上来自训练配方，而不是架构本身。</li>
+<li>BBR-Net 提醒我们，持续学习里要保的是结构，不只是旧图像的外观。</li>
+<li>J-RAS 把 retrieval 从被动参考变成了可学习的分割上下文，适合病例驱动的医学场景。</li>
 </ol>
 <h2>逐篇精读</h2>
 <h2>1. ROBUST-WT: Robust Uncertainty-aware Segmentation Transform via Whitening and Training Enhancements</h2>
 <ul>
 <li>arXiv ID: 2606.03069v1</li>
-<li>Date: 2026-06-02</li>
-<li>URL: https://arxiv.org/abs/2606.03069</li>
-<li>Category: 直接相关</li>
-<li>Keep reason: 眼底视盘分割与跨域鲁棒训练。</li>
+<li>原始链接: https://arxiv.org/abs/2606.03069</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 训练鲁棒化</li>
+<li>发布时间: 2026-06-02T02:59:35Z</li>
+<li>保留理由: 它直接针对跨设备、跨协议下的分割退化，属于很典型的分割训练层改进。</li>
 </ul>
-<h2>Source Note</h2>
-<p>在 WT-PSE 上补训练增强与损失调度。</p>
-<h2>Analysis</h2>
-<p>背景：多域医学分割在不同设备和临床协议下性能退化，文中把 fundus optic disc segmentation benchmark 作为主要验证场景。</p>
-<p>方法：在原 WT-PSE 上增加 domain-adaptive augmentation、hybrid BCE+Dice loss 和 curriculum-based Dice weight scheduling。</p>
-<p>训练：以 fundus optic disc segmentation benchmark 为主。</p>
-<p>数据：fundus optic disc segmentation benchmark。</p>
-<p>创新：针对 scanner variation、edge noise、early-training instability 和 ablation control 做了补强。</p>
-<p>实验与结果：在 fundus optic disc benchmark 上对比 baseline epoch-5 与改进后 pipeline，核心结果是 Dice 和 ASD。</p>
-<p>局限：主要落在单个 benchmark 上，对更复杂病灶外推未充分展开。</p>
-<p>对眼底分割的可用性：适合当作眼底视盘分割的训练配方改造基线。</p>
-<h2>领域进展速览</h2>
+<h3>背景</h3>
+<p>一般化分割最怕训练和测试之间的设备、协议和噪声分布不一致。作者明确把原 WT-PSE 的四个短板点出来，说明问题并不在架构本身，而在训练流程对现实差异的覆盖不足。</p>
+<h3>方法拆解</h3>
+<p>他们加入了 domain-adaptive augmentation、hybrid BCE + Dice loss、curriculum-based Dice weight scheduling，以及可控的 ablation flags，让训练过程更稳定，也更容易做科学比较。</p>
+<h3>训练与数据</h3>
+<p>实验依然放在 fundus optic disc segmentation benchmark 上，但重点已经从改主干转到优化训练协议；这说明同一个架构，只要训练策略更贴近临床噪声，也能明显增益。</p>
+<h3>创新点</h3>
+<p>它把 scanner variation、edge noise 和 early-training instability 当成一组系统问题去处理，而不是零散补丁。</p>
+<h3>实验与结果</h3>
+<p>最后 epoch 的 optic-disc Dice 达到 0.956，ASD 为 13.31，明显优于 baseline epoch-5 的 Dice 0.939。</p>
+<h3>局限</h3>
+<p>它主要验证了单一 benchmark，跨到更复杂病灶、更多器械和更大域偏移时还需要继续补证据。</p>
+<h3>对医学图像分割的启发</h3>
+<p>如果后续要做眼底视盘或视杯分割，这篇很适合作为训练配方基线，尤其适合替换掉过于脆弱的纯 BCE 训练。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这类工作特别有工程价值，因为它告诉我们很多时候“训练方式”本身就是性能上限的一部分。</p>
+<h2>2. J-RAS: Mutual Adaptation for Medical Image Segmentation via Contrastive Retrieval-Augmented Joint Optimization</h2>
+<ul>
+<li>arXiv ID: 2510.09953v3</li>
+<li>原始链接: https://arxiv.org/abs/2510.09953</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 检索增强分割</li>
+<li>发布时间: 2026-06-02T00:00:00Z</li>
+<li>保留理由: 把检索和分割联合优化，比固定检索库或被动相似度检索更能服务边界恢复。</li>
+</ul>
+<h3>背景</h3>
+<p>很多检索增强分割只是把相似病例“拿来就用”，但检索器本身并不关心分割边界。作者抓住的核心问题是：如果检索目标不为分割任务服务，那么检索只能算被动参考。</p>
+<h3>方法拆解</h3>
+<p>J-RAS 通过 alternating contrastive and supervised learning 联合优化检索模型和分割模型，让 retrieval 学会挑出更有分割价值的 image-mask pair，再把这些样本当作结构化上下文送进分割器。</p>
+<h3>训练与数据</h3>
+<p>它在 ACDC、M&amp;Ms、乳腺超声和肺部 CT 等多种医学任务上做验证，并横跨 U-Net、TransUNet、SAM 和 SegFormer 等不同 backbone，强调方法的架构无关性。</p>
+<h3>创新点</h3>
+<p>最关键的创新是 mutual adaptation：检索分支不再只追视觉相似，而是追分割相关性；分割分支也会反过来塑形检索表示。</p>
+<h3>实验与结果</h3>
+<p>在 ACDC 上，SegFormer 的 mean Dice 从 0.8708 提升到 0.9115，mean HD 从 1.8130 降到 1.1489，说明 retrieval guidance 不是摆设。</p>
+<h3>局限</h3>
+<p>检索库质量和跨数据集对齐仍然是瓶颈；如果检索到的 guidance 本身就偏，收益会被快速稀释。</p>
+<h3>对医学图像分割的启发</h3>
+<p>对低标注、病例检索充足的场景很有吸引力，尤其适合做 case-based medical segmentation 或辅助边界精修。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇把“找相似样本”从数据工程问题升级成了可学习的分割策略，属于很值得继续追的方向。</p>
+<h2>3. BBR-Net: Boundary-Balanced Replay for Continual Medical Image Segmentation</h2>
+<ul>
+<li>arXiv ID: 2606.14731v1</li>
+<li>原始链接: https://arxiv.org/abs/2606.14731</li>
+<li>归类: 直接相关</li>
+<li>核心问题: 连续学习中的结构记忆</li>
+<li>发布时间: 2026-06-02T04:10:01Z</li>
+<li>保留理由: 它把 replay 的核心从“记住外观”改成“保住解剖结构”，很适合医学分割。</li>
+</ul>
+<h3>背景</h3>
+<p>连续学习做医学分割时，灾难性遗忘往往不是因为记忆容量不够，而是 replay 里没保住关键结构。心脏超声这种任务里，边界一旦退化，后续任务就很难再靠外观信息补回来。</p>
+<h3>方法拆解</h3>
+<p>BBR-Net 在 replay sample selection 中显式加入 boundary-aware priority 与 class balance，让被回放的样本更能代表解剖结构而不是仅仅代表像素分布。</p>
+<h3>训练与数据</h3>
+<p>作者在 CAMUS 和 CardiacNet 上做 forward 和 reverse 的任务顺序实验，并通过受控结构扰动来验证边界质量和遗忘之间的关系。</p>
+<h3>创新点</h3>
+<p>它把“结构可靠性”当成影响 continual segmentation 成败的关键因素，而不是把遗忘简单归结为记忆样本太少。</p>
+<h3>实验与结果</h3>
+<p>在 forward 设置里，BBR-Net 能把源任务性能维持得接近 offline joint training，同时明显降低遗忘，并保持对目标任务的适应。</p>
+<h3>局限</h3>
+<p>reverse setting 说明如果起始结构本身就噪声很多，结构感知 replay 也会失效；这意味着 replay 质量强依赖初始结构。</p>
+<h3>对医学图像分割的启发</h3>
+<p>如果后续要做多阶段眼底或多中心长期随访分割，这篇对“怎么保存旧域结构”很有参考价值。</p>
+<h3>我的判断</h3>
+<p>我的判断是，这篇最重要的启发是：连续学习里要保的不是“旧图像”，而是“旧结构”。</p>
+<h2>跨日趋势</h2>
 <ol>
-<li>标注效率和伪标签质量是这几天最稳定的主线。</li>
-<li>如果后续要做新医院/新设备，XSSR 这类样本选择值得先试。</li>
-<li>如果后续要做半监督眼底分割，Quality-Guided SSL 是最直接的加法。</li>
+<li>这一天的共同点是：把“分割怎么做得更稳”放在主位，而不是只盯更大模型。</li>
+<li>ROBUST-WT 处理训练层，BBR-Net 处理记忆层，J-RAS 处理上下文层，三者正好覆盖训练、连续学习和检索三个维度。</li>
+<li>如果把这三条线串起来，下一步就不是单点改进，而是一个更完整的医学分割系统。</li>
 </ol>
 <h2>归档说明</h2>
 <p>原始论文材料与报告已按日期和论文名归档到 reference/2026-06-02/。</p></div>
