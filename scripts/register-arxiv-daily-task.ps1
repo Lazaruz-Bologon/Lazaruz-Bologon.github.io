@@ -15,5 +15,5 @@ if (-not $StartTime) {
 }
 
 $tr = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -Commit"
-schtasks /Create /TN $TaskName /SC DAILY /ST $StartTime /RI 5 /DU 23:59 /TR $tr /F | Out-Null
-Write-Host "Registered scheduled task $TaskName starting at $StartTime with 5-minute repetition"
+schtasks /Create /TN $TaskName /SC DAILY /ST $StartTime /TR $tr /F | Out-Null
+Write-Host "Registered scheduled task $TaskName starting at $StartTime with daily execution"
